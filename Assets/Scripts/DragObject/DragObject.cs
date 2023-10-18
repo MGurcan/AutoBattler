@@ -21,7 +21,7 @@ public class DragObject : MonoBehaviour
     }
 
     private void OnMouseDown() {
-        if(gameObject.GetComponent<Character>().currentSquareIndex != -1){   // -2 for default base placement
+        if(gameObject.GetComponent<Character>().currentSquareIndex != -1){
             squares[gameObject.GetComponent<Character>().currentSquareIndex].GetComponent<Square>().IsEmpty = true;
         }
             
@@ -32,7 +32,6 @@ public class DragObject : MonoBehaviour
             squares[minDistanceSquareIndex].GetComponent<Square>().IsEmpty = false;
             gameObject.GetComponent<Character>().characterPosition = squares[minDistanceSquareIndex].GetComponent<Square>().squareTransform.position;
             gameObject.GetComponent<Character>().currentSquareIndex = minDistanceSquareIndex;
-
         }
         Vector3 temp = squares[gameObject.GetComponent<Character>().currentSquareIndex].GetComponent<Square>().squareTransform.position;
         transform.position = new Vector3(temp.x, temp.y+1, temp.z);

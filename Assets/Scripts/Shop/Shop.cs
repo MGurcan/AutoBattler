@@ -29,6 +29,7 @@ public class Shop : MonoBehaviour
     }
 
 	public List<ShopItem> ShopItemsList;
+    public List<ShopItem> CurrentShopItems;
 
     public GameManager gameManager;
 
@@ -40,27 +41,37 @@ public class Shop : MonoBehaviour
 
     public Character PurchaseCharacter(int itemIndex)
     {
-        Character character = new Character(ShopItemsList[itemIndex].shopItemId, ShopItemsList[itemIndex].name);
+        Character character = new Character(CurrentShopItems[itemIndex].shopItemId, CurrentShopItems[itemIndex].name);
         gameManager.characterList.Add(character);
 
         gameManager.InstantiateCharacter(character);
+
+        Transform shopItemsTransform = ShopPanel.transform.Find("ShopItems");
+        shopItemsTransform.GetChild(itemIndex).gameObject.SetActive(false);
         return character;
     }
 
     private void Start() {
-        int len = ShopItemsList.Count;
+        CurrentShopItems = PrepareRandomShopItems(5);
+        StartCoroutine(InstantiateShopItemsToPanel());
+    }
+
+    private IEnumerator InstantiateShopItemsToPanel(){
+        int len = CurrentShopItems.Count;
         Transform shopItemsTransform = ShopPanel.transform.Find("ShopItems");
 
 		for (int i = 0; i < len; i++) {
+            yield return new WaitForSeconds(0.2f);
+
             GameObject purchaseButton = Instantiate(purchaseButtonPrefab, shopItemsTransform);
             Button button = purchaseButton.GetComponent<Button>();
 
-            button.transform.Find("NameText").GetComponent<Text>().text = ShopItemsList[i].name;
-            button.transform.Find("PriceText").GetComponent<Text>().text = ShopItemsList[i].price.ToString() + "$";
+            button.transform.Find("NameText").GetComponent<Text>().text = CurrentShopItems[i].name;
+            button.transform.Find("PriceText").GetComponent<Text>().text = CurrentShopItems[i].price.ToString() + "$";
 
 
             Transform buttonGameObjectTransform = button.transform.Find("ButtonGameObject");
-            GameObject buttonGameObject = Instantiate(ShopItemsList[i].prefab, buttonGameObjectTransform);
+            GameObject buttonGameObject = Instantiate(CurrentShopItems[i].prefab, buttonGameObjectTransform);
             buttonGameObject.transform.localScale = new Vector3(80f, 80f, 80f);
             buttonGameObject.layer = LayerMask.NameToLayer("UI");
             Destroy(buttonGameObject.GetComponent<DragObject>());
@@ -68,5 +79,43 @@ public class Shop : MonoBehaviour
             int itemIndex = i;
 			button.onClick.AddListener(() => PurchaseCharacter(itemIndex));
 		}
+    }
+
+    private void ClearShopItemsList(){
+        Transform shopItemsTransform = ShopPanel.transform.Find("ShopItems");
+        if(shopItemsTransform != null)
+        {
+            foreach (Transform child in shopItemsTransform){
+                Destroy(child.gameObject);
+            }
+        }
+
+    }
+
+    private bool isShopOpen = false;
+
+    public void ToggleShop()
+    {
+        isShopOpen = !isShopOpen;
+        ShopPanel.SetActive(isShopOpen);
+    }
+
+    private List<ShopItem> PrepareRandomShopItems(int count)
+    {
+        List<ShopItem> randomItems = new List<ShopItem>();
+
+        for(int i = 0; i < count; i++)
+        {
+            int randomIndex = Random.Range(0, ShopItemsList.Count);
+            randomItems.Add(ShopItemsList[randomIndex]);
+        }
+        return randomItems;
+    }
+
+    public void RefreshShopList()
+    {
+        ClearShopItemsList();
+        CurrentShopItems = PrepareRandomShopItems(5);
+        StartCoroutine(InstantiateShopItemsToPanel());
     }
 }

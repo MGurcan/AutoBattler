@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
     public void InstantiateCharacter(Character newCharacter){
         GameObject newObject = Instantiate(characterPrefabs[newCharacter.id], Vector3.zero, Quaternion.Euler(0, 0, 0));
         Transform currentTransform = newObject.transform;
-        currentTransform.position = (newCharacter.characterPosition == Vector3.zero) ? FindFirstEmptyBaseSquare() : newCharacter.characterPosition;
 
         characterList[characterList.Count - 1].characterPosition = currentTransform.position;
         newObject.GetComponent<DragObject>().squares = squares;
@@ -41,17 +40,24 @@ public class GameManager : MonoBehaviour
         newObject.GetComponent<Character>().id = newCharacter.id;
         newObject.GetComponent<Character>().name = newCharacter.name;
         newObject.GetComponent<Character>().characterPosition = newCharacter.characterPosition;
+        newObject.GetComponent<Character>().currentSquareIndex = (newCharacter.characterPosition == Vector3.zero) ? FindFirstEmptyBaseSquareIndex() : newCharacter.currentSquareIndex;
+
+        currentTransform.position = (newCharacter.characterPosition == Vector3.zero) ? GetSquarePosition(newObject.GetComponent<Character>().currentSquareIndex) : newCharacter.characterPosition;
     }
 
-    private Vector3 FindFirstEmptyBaseSquare(){
+    private Vector3 GetSquarePosition(int squareIndex){
+        return new Vector3(squares[squareIndex].GetComponent<Square>().squareTransform.position.x, squares[squareIndex].GetComponent<Square>().squareTransform.position.y+1, squares[squareIndex].GetComponent<Square>().squareTransform.position.z);
+    }
+
+    private int FindFirstEmptyBaseSquareIndex(){
         for(int i = 0; i < squares.Length; i++){
             if(squares[i].GetComponent<Square>().isBaseSquare && squares[i].GetComponent<Square>().IsEmpty && squares[i].GetComponent<Square>().IsPlaceble){
                 squares[i].GetComponent<Square>().IsEmpty = false;
-
-                return new Vector3(squares[i].GetComponent<Square>().squareTransform.position.x, squares[i].GetComponent<Square>().squareTransform.position.y+1, squares[i].GetComponent<Square>().squareTransform.position.z);
+                int index = i;
+                return index;
             }
         }
-        return Vector3.zero;    // TODO: if returns null add control to "InstantiateCharactersToBase" @mgurcan
+        return -1;  // TODO: if returns null add control to "InstantiateCharactersToBase" @mgurcan
     }
 }
 
