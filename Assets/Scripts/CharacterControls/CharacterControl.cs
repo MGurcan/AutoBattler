@@ -6,24 +6,37 @@ public abstract class CharacterControl : MonoBehaviour
 {
     [SerializeField]
     private float _charMoveSpeed;
+    [SerializeField]
+    private Animator _charAnimator;
 
     //Start is for Test Purposes
     protected void Start()
     {
         StartCoroutine( RunTowardsTarget() );
+        _charAnimator.SetBool( "isRunning", true );
     }
 
     public virtual IEnumerator RunTowardsTarget()
     {
+
         Transform target = FindTarget();
-        Vector3 direction = ( target.position - transform.position ).normalized;
+        Vector3 direction = (target.position - transform.position).normalized;
         float distance = Vector3.Distance( transform.position, target.position );
-        while ( distance > 0.5f )
+        if (target != null)
         {
-            transform.Translate( direction * _charMoveSpeed * Time.deltaTime );
-            distance = Vector3.Distance( transform.position, target.position );
-            yield return null;
+
+            while (distance > 0.5f)
+            {
+                transform.Translate( direction * _charMoveSpeed * Time.deltaTime );
+                distance = Vector3.Distance( transform.position, target.position );
+                yield return null;
+            }
+            Attack();
         }
+    }
+    public virtual void Attack()
+    {
+        _charAnimator.SetBool( "isAttacking", true );
     }
     public abstract Transform FindTarget();
 }
