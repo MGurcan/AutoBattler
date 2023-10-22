@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 503599846}
   - component: {fileID: 503599845}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: CapsuleEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2446,8 +2446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335dbc3014b077a468bd6e8555c65b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _charMoveSpeed: 1
+  _charMoveSpeed: 4
   _charAnimator: {fileID: 2066441707}
+  _rotationSpeed: 5
 --- !u!1 &2107786737
 GameObject:
   m_ObjectHideFlags: 0
