@@ -2449,6 +2449,7 @@ MonoBehaviour:
   _charMoveSpeed: 4
   _charAnimator: {fileID: 2066441707}
   _rotationSpeed: 5
+  _specialAttackTime: 1.5
 --- !u!1 &2107786737
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,10 @@ public abstract class CharacterControl : MonoBehaviour
     private Animator _charAnimator;
     [SerializeField]
     private float _rotationSpeed;
+    [SerializeField]
+    private float _specialAttackTime;
+    [SerializeField]
+    private bool _isAttacking;
 
 
     //Start is for Test Purposes
@@ -36,13 +40,26 @@ public abstract class CharacterControl : MonoBehaviour
                 distance = Vector3.Distance( transform.position, target.position );
                 yield return null;
             }
-
-            Attack();
+            StartCoroutine( Attack() );
         }
     }
-    public virtual void Attack()
+    public virtual IEnumerator Attack()
     {
+        SpecialAttack();
+        yield return new WaitForSeconds( _specialAttackTime );
         _charAnimator.SetBool( "isAttacking", true );
+        while (_isAttacking)
+        {
+            // In here we will change the isAttacking to false if enemy dies
+            //Every time animation triggers enemy Health will decrease(can be done via AnimationEvents or we can use float values to match the attackDuration)
+            yield return null;
+        }
     }
+
+    public virtual void SpecialAttack()
+    {
+        _charAnimator.SetBool( "isSpecialAttacking", true );
+    }
+
     public abstract Transform FindTarget();
 }

@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class AllyControl : CharacterControl
 {
-    public override IEnumerator RunTowardsTarget()
-    {
-        return base.RunTowardsTarget();
-    }
-
     public override Transform FindTarget()
     {
         Transform targetObject = null;
