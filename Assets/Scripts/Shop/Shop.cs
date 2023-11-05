@@ -48,6 +48,8 @@ public class Shop : MonoBehaviour
 
         Transform shopItemsTransform = ShopPanel.transform.Find("ShopItems");
         shopItemsTransform.GetChild(itemIndex).gameObject.SetActive(false);
+
+        gameManager.LevelUpCharacter(character);
         return character;
     }
 

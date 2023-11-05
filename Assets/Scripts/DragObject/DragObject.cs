@@ -11,6 +11,8 @@ public class DragObject : MonoBehaviour
     public Material squareHoverMaterial;
     public Material squareDefaultMaterial;
 
+    public int objectID;
+
     private GameManager gameManager;
     private void Start() {
         gameManager = FindObjectOfType<GameManager>();
@@ -21,19 +23,22 @@ public class DragObject : MonoBehaviour
     }
 
     private void OnMouseDown() {
-        if(gameObject.GetComponent<Character>().currentSquareIndex != -1){
-            squares[gameObject.GetComponent<Character>().currentSquareIndex].GetComponent<Square>().IsEmpty = true;
+        Character currentCharacter = gameManager.FindCharacterOnList(objectID);
+        if(currentCharacter.currentSquareIndex != -1){
+            squares[currentCharacter.currentSquareIndex].GetComponent<Square>().IsEmpty = true;
         }
             
         mousePosition = Input.mousePosition - GetMousePosition();
     }
     private void OnMouseUp() {
+        Character currentCharacter = gameManager.FindCharacterOnList(objectID);
         if(minDistanceSquareIndex != -1){
             squares[minDistanceSquareIndex].GetComponent<Square>().IsEmpty = false;
-            gameObject.GetComponent<Character>().characterPosition = squares[minDistanceSquareIndex].GetComponent<Square>().squareTransform.position;
-            gameObject.GetComponent<Character>().currentSquareIndex = minDistanceSquareIndex;
+
+            currentCharacter.characterPosition = squares[minDistanceSquareIndex].GetComponent<Square>().squareTransform.position;
+            currentCharacter.currentSquareIndex = minDistanceSquareIndex;
         }
-        Vector3 temp = squares[gameObject.GetComponent<Character>().currentSquareIndex].GetComponent<Square>().squareTransform.position;
+        Vector3 temp = squares[currentCharacter.currentSquareIndex].GetComponent<Square>().squareTransform.position;
         transform.position = new Vector3(temp.x, temp.y+1, temp.z);
     }
     private void OnMouseDrag() {

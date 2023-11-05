@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+[System.Serializable] public class Character
 {
     public int id;
+    public int objectID;
     public string name;
 
+    public int level = 1;
     public Vector3 characterPosition = Vector3.zero;
 
     public int currentSquareIndex = -1;
