@@ -14,7 +14,6 @@ public class AllyControl : CharacterControl
             foreach( GameObject target in targets )
             {
                 float distance = Vector3.Distance( transform.position, target.transform.position );
-                Debug.Log( distance );
                 if ( distance < closestDistance )
                 {
                     closestDistance = distance;

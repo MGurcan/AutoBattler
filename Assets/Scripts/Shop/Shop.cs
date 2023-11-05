@@ -38,6 +38,8 @@ public class Shop : MonoBehaviour
     public GameObject ShopPanel;
     public GameObject purchaseButtonPrefab;
 
+    public Material hologramMaterial;
+
 
     public Character PurchaseCharacter(int itemIndex)
     {
@@ -78,6 +80,9 @@ public class Shop : MonoBehaviour
             buttonGameObject.layer = LayerMask.NameToLayer("UI");
             Destroy(buttonGameObject.GetComponent<DragObject>());
 
+            buttonGameObject.AddComponent<RotateAroundItself>();
+            buttonGameObject.GetComponent<Renderer>().material = hologramMaterial;
+            buttonGameObject.AddComponent<GlitchControl>();
             int itemIndex = i;
 			button.onClick.AddListener(() => PurchaseCharacter(itemIndex));
 		}

@@ -1848,6 +1848,7 @@ MonoBehaviour:
   - {fileID: 1056915721}
   ShopPanel: {fileID: 2052016811}
   purchaseButtonPrefab: {fileID: 4011811583503149942, guid: 480a8e7e563ac4645ad28233db638498, type: 3}
+  hologramMaterial: {fileID: 2100000, guid: 266c059153ed44bd5a80dce8b1c591f4, type: 2}
 --- !u!1 &1500091318
 GameObject:
   m_ObjectHideFlags: 0
